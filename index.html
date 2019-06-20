@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="style.css" rel="stylesheet">
+    <title>JavaScript Drum Kit</title>
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="keys">
+        <div data-key="65" class="key">
+          <kbd>A</kbd>
+          <span class="sound">clap</span>
+        </div>
+        <div data-key="83" class="key">
+          <kbd>S</kbd>
+          <span class="sound">hihat</span>
+        </div>
+        <div data-key="68" class="key">
+          <kbd>D</kbd>
+          <span class="sound">kick</span>
+        </div>
+        <div data-key="70" class="key">
+          <kbd>F</kbd>
+          <span class="sound">openhat</span>
+        </div>
+        <div data-key="71" class="key">
+          <kbd>G</kbd>
+          <span class="sound">boom</span>
+        </div>
+        <div data-key="72" class="key">
+          <kbd>H</kbd>
+          <span class="sound">ride</span>
+        </div>
+        <div data-key="74" class="key">
+          <kbd>J</kbd>
+          <span class="sound">snare</span>
+        </div>
+        <div data-key="75" class="key">
+          <kbd>K</kbd>
+          <span class="sound">tom</span>
+        </div>
+        <div data-key="76" class="key">
+          <kbd>L</kbd>
+          <span class="sound">tink</span>
+        </div>
+      </div>
+    
+      <audio data-key="65" src="sounds/clap.wav"></audio>
+      <audio data-key="83" src="sounds/hihat.wav"></audio>
+      <audio data-key="68" src="sounds/kick.wav"></audio>
+      <audio data-key="70" src="sounds/openhat.wav"></audio>
+      <audio data-key="71" src="sounds/boom.wav"></audio>
+      <audio data-key="72" src="sounds/ride.wav"></audio>
+      <audio data-key="74" src="sounds/snare.wav"></audio>
+      <audio data-key="75" src="sounds/tom.wav"></audio>
+      <audio data-key="76" src="sounds/tink.wav"></audio>
+    <script>
+        const binded_keys = Array.from(document.querySelectorAll('div.keys .key'));
+        const filtered_keys = binded_keys.map(keys => parseFloat(keys.dataset.key));
+
+        window.addEventListener("keydown", checkedKeyPress, false);
+        function checkedKeyPress(key){
+            for(let i = 0;i < filtered_keys.length; i++){
+                if(key.keyCode === filtered_keys[i]){
+                    const target_audio = document.querySelector(`audio[data-key='${key.keyCode}']`);
+                    const target_key = document.querySelector(`div.keys [data-key='${key.keyCode}']`);
+                    target_key.classList.add("playing");
+                    target_audio.play();
+                    setTimeout(
+                        function() {
+                            target_key.classList.remove('playing');
+                        }, 50);   
+                }
+            }
+            return key.keyCode;
+        }
+        console.log(filtered_keys);
+        
+    </script>
+</body>
+</html>
