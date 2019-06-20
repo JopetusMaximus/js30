@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+    <style>
+        html {
+          background: #018DED url(http://unsplash.it/1500/1000?image=881&blur=5);
+          background-size: cover;
+          font-family: 'helvetica neue';
+          text-align: center;
+          font-size: 10px;
+        }
+    
+        body {
+          margin: 0;
+          font-size: 2rem;
+          display: flex;
+          flex: 1;
+          min-height: 100vh;
+          align-items: center;
+        }
+    
+        .clock {
+          width: 30rem;
+          height: 30rem;
+          border: 20px solid white;
+          border-radius: 50%;
+          margin: 50px auto;
+          position: relative;
+          padding: 2rem;
+          box-shadow:
+            0 0 0 4px rgba(0,0,0,0.1),
+            inset 0 0 0 3px #EFEFEF,
+            inset 0 0 10px black,
+            0 0 10px rgba(0,0,0,0.2);
+        }
+    
+        .clock-face {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          transform: translateY(-3px); /* account for the height of the clock hands */
+        }
+    
+        .hand {
+          width: 50%;
+          height: 6px;
+          background: black;
+          position: absolute;
+          top: 50%;
+          transform-origin: 100%;
+          transform: rotate(90deg);
+          transition: all 0.05s;
+          transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+        }
+    </style>
+<body onload="timeInitialize(timeHour, timeMinute, timeSeconds)">
+    <div class="clock">
+        <div class="clock-face">
+            <div class="hand hour-hand"></div>
+            <div class="hand min-hand"></div>
+            <div class="hand second-hand"></div>
+        </div>
+    </div>
+  
+    <script>
+        const today = new Date();
+        const   timeHour = today.getHours();
+        let   timeMinute = today.getMinutes();;
+        let   timeSeconds = today.getSeconds();
+        const timeHr = document.querySelector('div .hour-hand');
+        const timeMin = document.querySelector('div .min-hand');
+        const timeSec = document.querySelector('div .second-hand');
+        let timeHour_deg = (timeHour * 30) + 90 - 1;
+        let timeMinute_deg = (timeMinute * 6) + 90;
+        let timeSeconds_deg = (timeSeconds * 6) + 90;
+        function timeInitialize(timeHour, timeMinute, timeSeconds){
+
+            //Adjusting the hour based on minutes
+            timeHour_deg += 0.5 * timeMinute;
+            //Deploying the placement of the hands on the clock
+            timeHr.style.transform = `rotate(${timeHour_deg}deg)`;
+            timeMin.style.transform = `rotate(${timeMinute_deg}deg)`;
+            timeMin.style.backgroundColor = `green`;
+            timeSec.style.transform = `rotate(${timeSeconds_deg}deg)`;
+            timeSec.style.backgroundColor = `red`;
+            console.log('timeHour_deg:', timeHour_deg);
+            console.log('timeMinute_deg:', timeMinute_deg);
+            console.log('timeSeconds_deg:', timeSeconds_deg);
+        }
+        startTime();
+        function startTime(){
+            timeSeconds += 1;
+            let timeSeconds_deg = (timeSeconds * 6) + 90;
+            if(timeSeconds != 0 || timeSeconds_deg % 450 != 0){
+                timeSec.style.transform = `rotate(${timeSeconds_deg}deg)`;
+            }
+            if(timeSeconds_deg % 360 === 90){
+                timeMinute += 1;
+                timeMinute_deg += 6 ;
+                timeMin.style.transform = `rotate(${timeMinute_deg}deg)`;
+                timeHour_deg += 0.5;
+                timeHr.style.transform = `rotate(${timeHour_deg}deg)`;
+                console.log('timeMinute_deg:', timeMinute_deg);
+                console.log('timeHour_deg:', timeHour_deg);
+            }
+            // if(timeHour_deg % 30 === 0){
+            //     timeMinute_deg += 12;
+            // }
+            console.log('timeSeconds_deg:', timeSeconds_deg);
+            setTimeout(startTime,10);
+        }
+    </script>
+</body>
+</html>
